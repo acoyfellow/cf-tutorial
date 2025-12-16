@@ -15,6 +15,7 @@ declare global {
 				MY_DO: DurableObjectNamespace;
 				WORKER: Fetcher;
 				AI: Ai;
+				ASSETS: Fetcher;
 				BETTER_AUTH_SECRET?: string;
 				BETTER_AUTH_URL?: string;
 			};

@@ -21,6 +21,7 @@ export type QuizSession = {
 };
 
 type Mode = 'menu' | 'quiz' | 'analysis' | 'history' | 'session-detail';
+type Difficulty = 'easy' | 'normal';
 
 const STORAGE_KEYS = {
   SESSIONS: 'cf-quiz-sessions',
@@ -65,6 +66,7 @@ function shuffle<T>(arr: T[]): T[] {
 
 class QuizStore {
   mode = $state<Mode>('menu');
+  difficulty = $state<Difficulty>('normal');
   cards = $state<Flashcard[]>([]);
   currentIndex = $state(0);
   responses = $state<QuizResponse[]>([]);
@@ -79,6 +81,8 @@ class QuizStore {
   sessionId = $state('');
   sessions = $state<QuizSession[]>([]);
   viewingSession = $state<QuizSession | null>(null);
+  choices = $state<string[]>([]);
+  selectedChoice = $state<string | null>(null);
 
   constructor() {
     if (browser) {
@@ -106,14 +110,15 @@ class QuizStore {
     return answered.length ? answered.reduce((s, r) => s + r.score, 0) / answered.length : 0;
   }
 
-  startQuiz(mode: 'full' | 'quick' | 'category' | 'weak', category?: string) {
+  startQuiz(mode: 'full' | 'quick' | 'category' | 'weak', category?: string, difficulty: Difficulty = 'normal') {
     this.mode = 'quiz';
+    this.difficulty = difficulty;
     this.responses = [];
     this.currentIndex = 0;
     this.startTime = Date.now();
     this.cardStartTime = Date.now();
     this.sessionId = `quiz-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
-    this.quizMode = mode === 'category' ? category! : mode;
+    this.quizMode = mode === 'category' ? category! : (difficulty === 'easy' ? `${mode} (easy)` : mode);
     this.resetCardState();
 
     if (mode === 'full') {
@@ -134,7 +139,40 @@ class QuizStore {
       if (!this.cards.length) this.cards = [...flashcards];
     }
 
+    if (difficulty === 'easy') {
+      this.generateChoices();
+    }
+
     this.persistCurrentSession();
+  }
+
+  generateChoices() {
+    const card = this.currentCard;
+    if (!card) return;
+
+    // Get wrong answers from other cards (prefer same category, then others)
+    const sameCat = flashcards.filter(c => c.id !== card.id && c.category === card.category);
+    const otherCat = flashcards.filter(c => c.id !== card.id && c.category !== card.category);
+    const pool = shuffle([...sameCat, ...otherCat]);
+
+    const wrongAnswers = pool.slice(0, 3).map(c => c.answer);
+    this.choices = shuffle([card.answer, ...wrongAnswers]);
+    this.selectedChoice = null;
+  }
+
+  selectChoice(choice: string) {
+    if (this.judgeResult) return; // Already answered
+
+    this.selectedChoice = choice;
+    const card = this.currentCard;
+    const isCorrect = choice === card.answer;
+
+    this.judgeResult = {
+      score: isCorrect ? 10 : 0,
+      feedback: isCorrect ? 'Correct!' : `Incorrect. The answer is: ${card.answer}`
+    };
+    this.userAnswer = choice;
+    this.saveResponse(this.judgeResult.score, choice, this.judgeResult.feedback);
   }
 
   resumeQuiz(session: QuizSession) {
@@ -156,6 +194,10 @@ class QuizStore {
     this.followUp = '';
     this.followUpResult = null;
     this.cardStartTime = Date.now();
+    this.selectedChoice = null;
+    if (this.difficulty === 'easy') {
+      this.generateChoices();
+    }
   }
 
   saveResponse(score: number, answer: string, feedback = '') {

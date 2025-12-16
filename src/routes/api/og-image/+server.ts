@@ -1,17 +1,27 @@
 import { Resvg } from '@cf-wasm/resvg';
+import type { Fetcher } from '@cloudflare/workers-types';
 import type { RequestHandler } from './$types';
 
 let fontCache: { bold: Uint8Array | null; regular: Uint8Array | null } = { bold: null, regular: null };
 
-async function loadFonts(fetchFn: typeof fetch, origin: string) {
+async function loadFonts(fetchFn: typeof fetch, origin: string, assets?: Fetcher) {
   if (fontCache.bold && fontCache.regular) return;
 
-  const [boldRes, regularRes] = await Promise.all([
-    fetchFn(`${origin}/fonts/Google_Sans_Flex/static/GoogleSansFlex_36pt-Bold.ttf`),
-    fetchFn(`${origin}/fonts/Google_Sans_Code/static/GoogleSansCode-Regular.ttf`)
-  ]);
+  const boldPath = '/fonts/Google_Sans_Flex/static/GoogleSansFlex_36pt-Bold.ttf';
+  const regularPath = '/fonts/Google_Sans_Code/static/GoogleSansCode-Regular.ttf';
 
-  if (!boldRes.ok || !regularRes.ok) throw new Error('Failed to load fonts');
+  // Use ASSETS binding in production, regular fetch in dev
+  const fetchBold = assets
+    ? assets.fetch(new URL(boldPath, origin).toString())
+    : fetchFn(`${origin}${boldPath}`);
+  const fetchRegular = assets
+    ? assets.fetch(new URL(regularPath, origin).toString())
+    : fetchFn(`${origin}${regularPath}`);
+
+  const [boldRes, regularRes] = await Promise.all([fetchBold, fetchRegular]);
+
+  if (!boldRes.ok) throw new Error(`Failed to fetch bold font: ${boldRes.status}`);
+  if (!regularRes.ok) throw new Error(`Failed to fetch regular font: ${regularRes.status}`);
 
   const [boldBuf, regularBuf] = await Promise.all([boldRes.arrayBuffer(), regularRes.arrayBuffer()]);
   fontCache.bold = new Uint8Array(boldBuf);
@@ -58,7 +68,7 @@ function generateOGImageSVG(title: string, description: string): string {
 </svg>`;
 }
 
-export const GET: RequestHandler = async ({ url, fetch }) => {
+export const GET: RequestHandler = async ({ url, fetch, platform }) => {
   const title = url.searchParams.get('title') || 'Cloudflare Tutorial';
   const description = url.searchParams.get('description') || '';
   const format = url.searchParams.get('format');
@@ -71,7 +81,7 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
     });
   }
 
-  await loadFonts(fetch, url.origin);
+  await loadFonts(fetch, url.origin, platform?.env?.ASSETS);
 
   const resvg = new Resvg(svg, {
     font: {
