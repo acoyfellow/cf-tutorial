@@ -1,0 +1,8 @@
+node_modules
+.env
+.alchemy
+.svelte-kit
+.wrangler
+build
+dist
+*.local
