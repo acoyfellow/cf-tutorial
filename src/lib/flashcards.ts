@@ -16,6 +16,10 @@ export const flashcards: Flashcard[] = [
   { id: "W014", category: "Workers Fundamentals", question: "What's the ES modules Worker signature?", answer: "export default { async fetch(request, env, ctx) { return new Response() } }", tags: ["handler", "basics"] },
   { id: "W015", category: "Workers Fundamentals", question: "What are the three parameters in fetch handler?", answer: "request (incoming Request), env (bindings), ctx (execution context with waitUntil)", tags: ["handler"] },
   { id: "W016", category: "Workers Fundamentals", question: "What languages can Workers run?", answer: "JavaScript, TypeScript, Python, Rust (via WASM), and any language that compiles to WebAssembly", tags: ["languages"] },
+  { id: "W017", category: "Workers Fundamentals", question: "What is nodejs_compat flag?", answer: "Enables Node.js APIs in Workers - crypto, buffer, streams, etc.", tags: ["nodejs", "compatibility"] },
+  { id: "W018", category: "Workers Fundamentals", question: "What's AsyncLocalStorage in Workers?", answer: "Enable with nodejs_als flag - propagate context through async calls", tags: ["nodejs", "async"] },
+  { id: "W019", category: "Workers Fundamentals", question: "How to run Python Workers?", answer: "Use pywrangler CLI, extend WorkerEntrypoint, add python_workers compat flag", tags: ["python", "languages"] },
+  { id: "W020", category: "Workers Fundamentals", question: "What's the scheduled handler?", answer: "async scheduled(controller, env, ctx) - handles Cron Trigger executions", tags: ["handler", "cron"] },
 
   // ==================== EXECUTION CONTEXT ====================
   { id: "E001", category: "Execution Context", question: "What does ctx.waitUntil() do?", answer: "Extends Worker lifetime to complete async tasks after response sent. Doesn't block response.", tags: ["context", "important"] },
@@ -36,6 +40,8 @@ export const flashcards: Flashcard[] = [
   { id: "DO009", category: "Durable Objects", question: "What's WebSocket Hibernation?", answer: "DOs can hibernate while WebSocket connected. Wake on message. Saves duration cost.", tags: ["do", "websocket"] },
   { id: "DO010", category: "Durable Objects", question: "What storage backend do new DOs use?", answer: "SQLite storage (new_sqlite_classes in migrations). Provides sql.exec() API.", tags: ["do", "storage"] },
   { id: "DO011", category: "Durable Objects", question: "What's the DO Alarms API?", answer: "Schedule future execution at specific time. this.ctx.storage.setAlarm(timestamp)", tags: ["do", "alarms"] },
+  { id: "DO012", category: "Durable Objects", question: "How do DO gradual deployments work?", answer: "DOs stick to their version until deployment changes - deterministic per instance ID", tags: ["do", "deployment"] },
+  { id: "DO013", category: "Durable Objects", question: "What's DO data location?", answer: "Can hint preferred region, but DO migrates to be near its callers", tags: ["do", "location"] },
 
   // ==================== D1 ====================
   { id: "D1001", category: "D1", question: "What database engine powers D1?", answer: "SQLite", tags: ["d1"] },
@@ -96,6 +102,9 @@ export const flashcards: Flashcard[] = [
   { id: "CT002", category: "Containers", question: "How do you define a Container?", answer: "export class MyContainer extends Container { defaultPort = 4000; sleepAfter = '10m'; }", tags: ["containers", "api"] },
   { id: "CT003", category: "Containers", question: "How are Containers managed?", answer: "Built on Durable Objects. Worker code controls lifecycle. getContainer(env.MY_CONTAINER, sessionId)", tags: ["containers", "architecture"] },
   { id: "CT004", category: "Containers", question: "When to use Containers vs Workers?", answer: "Containers: resource-intensive apps, specific runtimes, existing container images. Workers: JS/TS, fast startup, edge compute.", tags: ["containers", "comparison"] },
+  { id: "CT005", category: "Containers", question: "Container lifecycle hooks?", answer: "onStart(), onStop(), onError() - run when container starts, stops, or errors", tags: ["containers", "lifecycle"] },
+  { id: "CT006", category: "Containers", question: "How do Containers update?", answer: "Rolling deploy strategy - graceful shutdown of running instances, unlike instant Worker updates", tags: ["containers", "deployment"] },
+  { id: "CT007", category: "Containers", question: "Container sleep behavior?", answer: "sleepAfter config - container hibernates after idle timeout, wakes on next request", tags: ["containers", "lifecycle"] },
 
   // ==================== AI GATEWAY ====================
   { id: "AIG001", category: "AI Gateway", question: "What is AI Gateway?", answer: "Proxy for AI providers. Caching, rate limiting, logging, fallbacks, cost tracking for OpenAI, Anthropic, etc.", tags: ["ai-gateway", "important"] },
@@ -136,6 +145,8 @@ export const flashcards: Flashcard[] = [
   { id: "WR005", category: "Wrangler", question: "What's compatibility_date?", answer: "Locks runtime behavior to avoid breaking changes. Set to date you tested.", tags: ["wrangler", "important"] },
   { id: "WR007", category: "Wrangler", question: "How to view live logs?", answer: "wrangler tail - streams logs from deployed Worker", tags: ["wrangler"] },
   { id: "WR008", category: "Wrangler", question: "What config formats does Wrangler support?", answer: "wrangler.toml (TOML) or wrangler.jsonc (JSON with comments)", tags: ["wrangler", "config"] },
+  { id: "WR009", category: "Wrangler", question: "What's wrangler rollback?", answer: "Instantly revert to previous Worker version, creates new deployment", tags: ["wrangler", "deployment"] },
+  { id: "WR010", category: "Wrangler", question: "What are gradual deployments?", answer: "Split traffic between Worker versions - monitor errors before full rollout", tags: ["wrangler", "deployment"] },
 
   // ==================== HTMLREWRITER ====================
   { id: "HR001", category: "HTMLRewriter", question: "What is HTMLRewriter?", answer: "Streaming HTML parser with jQuery-like selectors. Modify HTML on the fly.", tags: ["htmlrewriter", "important"] },
@@ -160,6 +171,70 @@ export const flashcards: Flashcard[] = [
   { id: "CG005", category: "Gotchas", question: "ctx.waitUntil not a function?", answer: "Handler args are (request, env, ctx) not (request, ctx, env)", tags: ["gotcha"] },
   { id: "CG006", category: "Gotchas", question: "Request body already used error?", answer: "Request body is a stream - can only be read once. Clone request if needed twice.", tags: ["gotcha", "request"] },
   { id: "CG007", category: "Gotchas", question: "Why can't I import Node.js modules?", answer: "Workers use V8, not Node. Use nodejs_compat flag for Node.js API compatibility layer.", tags: ["gotcha", "node"] },
+  { id: "CG008", category: "Gotchas", question: "Error: 'requires nodejs_compat'?", answer: "Import Node.js module without flag - add compatibility_flags = ['nodejs_compat']", tags: ["gotcha", "node"] },
+  { id: "CG009", category: "Gotchas", question: "Cron Trigger timezone?", answer: "All Cron Triggers execute on UTC time", tags: ["gotcha", "cron"] },
+
+  // ==================== SANDBOX SDK ====================
+  { id: "SAN001", category: "Sandbox SDK", question: "What is the Sandbox SDK?", answer: "SDK for running untrusted code safely in isolated Linux containers. Built on Containers + Durable Objects.", tags: ["sandbox", "important"] },
+  { id: "SAN002", category: "Sandbox SDK", question: "How do you get a Sandbox instance?", answer: "getSandbox(env.Sandbox, 'session-id') - each session ID gets its own isolated container", tags: ["sandbox", "api"] },
+  { id: "SAN003", category: "Sandbox SDK", question: "What are the main Sandbox methods?", answer: "exec() - run commands, execStream() - stream output, startProcess() - background processes, createCodeContext() - code interpreter", tags: ["sandbox", "api"] },
+  { id: "SAN004", category: "Sandbox SDK", question: "What languages does Sandbox code interpreter support?", answer: "Python, JavaScript, TypeScript", tags: ["sandbox", "languages"] },
+  { id: "SAN005", category: "Sandbox SDK", question: "When to use Sandbox?", answer: "AI agents that execute code, interactive dev environments, CI/CD systems, data analysis platforms", tags: ["sandbox", "use-cases"] },
+
+  // ==================== DYNAMIC WORKER LOADERS ====================
+  { id: "WL001", category: "Dynamic Worker Loaders", question: "What are Dynamic Worker Loaders?", answer: "Bindings that let you load additional Workers with arbitrary code at runtime - each runs in its own isolate", tags: ["worker-loaders", "important"] },
+  { id: "WL002", category: "Dynamic Worker Loaders", question: "How to configure Worker Loader?", answer: "worker_loaders: [{ binding: 'LOADER' }] in wrangler config", tags: ["worker-loaders", "config"] },
+  { id: "WL003", category: "Dynamic Worker Loaders", question: "Current status of Worker Loaders?", answer: "Closed beta - works locally with Wrangler/workerd, requires signup to run on Cloudflare", tags: ["worker-loaders", "beta"] },
+
+  // ==================== WORKERS FOR PLATFORMS ====================
+  { id: "WFP001", category: "Workers for Platforms", question: "What is Workers for Platforms?", answer: "Enables SaaS providers to let customers deploy their own Workers within your platform", tags: ["workers-for-platforms", "important"] },
+  { id: "WFP002", category: "Workers for Platforms", question: "What's a dispatch namespace?", answer: "Collection of user Workers. Dynamic dispatch Worker routes requests to user Workers in the namespace", tags: ["workers-for-platforms", "architecture"] },
+  { id: "WFP003", category: "Workers for Platforms", question: "What's a dynamic dispatch Worker?", answer: "Your Worker that runs authentication, routing, and sanitization before dispatching to user Workers", tags: ["workers-for-platforms", "architecture"] },
+  { id: "WFP004", category: "Workers for Platforms", question: "What's untrusted mode?", answer: "Default mode - strongest isolation. request.cf unavailable, isolated cache per Worker", tags: ["workers-for-platforms", "security"] },
+
+  // ==================== EMAIL WORKERS ====================
+  { id: "EW001", category: "Email Workers", question: "What are Email Workers?", answer: "Workers that process incoming emails with custom logic - forwarding, filtering, auto-replies", tags: ["email", "important"] },
+  { id: "EW002", category: "Email Workers", question: "What's the Email Worker handler signature?", answer: "async email(message, env, ctx) - message has from, to, headers, raw properties", tags: ["email", "api"] },
+  { id: "EW003", category: "Email Workers", question: "How to forward email in Worker?", answer: "await message.forward('dest@example.com')", tags: ["email", "api"] },
+  { id: "EW004", category: "Email Workers", question: "How to reply to email in Worker?", answer: "await message.reply(new EmailMessage(...)) using mimetext library", tags: ["email", "api"] },
+
+  // ==================== CACHE API ====================
+  { id: "CA001", category: "Cache API", question: "What's the difference between Cache API and fetch caching?", answer: "Cache API: local datacenter only, fine control. fetch(): uses Tiered Cache, simpler", tags: ["cache", "important"] },
+  { id: "CA002", category: "Cache API", question: "Cache API basic methods?", answer: "caches.default.match(request), cache.put(request, response), cache.delete(request)", tags: ["cache", "api"] },
+  { id: "CA003", category: "Cache API", question: "Cache API and Tiered Cache limitation?", answer: "Cache API doesn't work with Tiered Cache - only caches in local datacenter", tags: ["cache", "limitations"] },
+  { id: "CA004", category: "Cache API", question: "fetch() cache modes?", answer: "{ cache: 'no-store' } bypasses cache, { cache: 'no-cache' } forces revalidation", tags: ["cache", "api"] },
+
+  // ==================== ANALYTICS ENGINE ====================
+  { id: "AE001", category: "Analytics Engine", question: "What is Analytics Engine?", answer: "Write custom event data from Workers, query with SQL. Good for usage-based billing, custom analytics", tags: ["analytics", "important"] },
+  { id: "AE002", category: "Analytics Engine", question: "How to write to Analytics Engine?", answer: "env.DATASET.writeDataPoint({ doubles: [], blobs: ['path'], indexes: ['userId'] })", tags: ["analytics", "api"] },
+  { id: "AE003", category: "Analytics Engine", question: "What's the Analytics Engine index?", answer: "Groups data for sampling. Use unique ID (user/customer) to prevent smaller customers being sampled to zero", tags: ["analytics", "sampling"] },
+
+  // ==================== OBSERVABILITY ====================
+  { id: "OB001", category: "Observability", question: "What observability tools does Workers have?", answer: "Logs, Traces, Metrics/Analytics, Real-time logs (wrangler tail), Logpush, Tail Workers", tags: ["observability", "important"] },
+  { id: "OB002", category: "Observability", question: "How to enable automatic tracing?", answer: "observability: { tracing: { enabled: true } } in wrangler config", tags: ["observability", "tracing"] },
+  { id: "OB003", category: "Observability", question: "What are Tail Workers?", answer: "Workers that receive logs from other Workers - for custom logging pipelines", tags: ["observability", "tail-workers"] },
+
+  // ==================== REALTIME ====================
+  { id: "RT001", category: "Realtime", question: "What is Cloudflare Realtime?", answer: "SFU (Selective Forwarding Unit) for WebRTC video/audio apps + TURN service for NAT traversal", tags: ["realtime", "important"] },
+  { id: "RT002", category: "Realtime", question: "What is TURN service?", answer: "Relays WebRTC traffic when direct peer-to-peer is blocked by NATs/firewalls", tags: ["realtime", "turn"] },
+  { id: "RT003", category: "Realtime", question: "What is RealtimeKit?", answer: "SDK for live video/voice - handles track management, peer management on top of Realtime SFU", tags: ["realtime", "sdk"] },
+
+  // ==================== STREAM ====================
+  { id: "ST001", category: "Stream", question: "What is Cloudflare Stream?", answer: "Video hosting with encoding, delivery, player, live streaming, WebRTC support", tags: ["stream", "important"] },
+  { id: "ST002", category: "Stream", question: "What's Stream Live?", answer: "RTMP/WebRTC ingest for live streaming with recording, simulcasting", tags: ["stream", "live"] },
+  { id: "ST003", category: "Stream", question: "Stream WebRTC benefit?", answer: "Sub-second latency for time-sensitive content (sports, auctions, Q&A)", tags: ["stream", "webrtc"] },
+
+  // ==================== IMAGES ====================
+  { id: "IM001", category: "Images", question: "What is Cloudflare Images binding?", answer: "Transform images directly in Workers - resize, rotate, blur, format conversion without public URL", tags: ["images", "important"] },
+  { id: "IM002", category: "Images", question: "How to use Images binding?", answer: "env.IMAGES.transform(stream, { width: 200, format: 'avif' })", tags: ["images", "api"] },
+
+  // ==================== TURNSTILE ====================
+  { id: "TN001", category: "Turnstile", question: "What is Turnstile?", answer: "Cloudflare's CAPTCHA alternative - privacy-preserving bot detection without puzzles", tags: ["turnstile", "important"] },
+  { id: "TN002", category: "Turnstile", question: "Turnstile vs traditional CAPTCHA?", answer: "Non-interactive for most users, privacy-first, no tracking, free", tags: ["turnstile", "comparison"] },
+
+  // ==================== STATIC ASSETS ====================
+  { id: "SA001", category: "Static Assets", question: "How to serve static assets from Worker?", answer: "Configure assets.directory in wrangler, optionally add assets.binding for dynamic access", tags: ["static-assets", "config"] },
+  { id: "SA002", category: "Static Assets", question: "Assets binding use case?", answer: "Dynamically fetch assets, customize caching, serve different assets based on logic", tags: ["static-assets", "use-cases"] },
 ];
 
 export const categories = [...new Set(flashcards.map(c => c.category))];

@@ -40,6 +40,7 @@ export const WORKER = await Worker(`${projectName}-worker`, {
   adopt: true,
   bindings: {
     MY_DO, // Add your DO bindings here
+    LOADER: { type: "worker_loader" }, // Worker Loader for executing user code
   },
   url: false
 });

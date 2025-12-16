@@ -137,99 +137,239 @@
 <div class="min-h-screen bg-gray-900 text-white">
   {#if quizStore.mode === "menu" || quizStore.mode === "quiz"}
     <!-- MENU -->
-    <div class="min-h-screen flex items-center justify-center p-6">
-      <div class="max-w-2xl w-full">
-        <div class="text-center mb-12">
-          <div class="flex items-center justify-center gap-3 mb-4">
-            <img src="/cloudflare.svg" alt="Cloudflare" class="h-12" />
+    <div class="min-h-screen p-6">
+      <div class="max-w-xl mx-auto pt-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <div class="flex items-center justify-center gap-3 mb-3">
+            <img src="/cloudflare.svg" alt="Cloudflare" class="h-10" />
           </div>
-          <h1 class="text-4xl font-bold mb-2">Cloudflare Tutorial</h1>
-          <p class="text-xl text-gray-400">
-            Interactive Learning & Quiz System
-          </p>
-          <p class="text-sm text-gray-500 mt-2">
+          <h1 class="text-2xl font-bold">Cloudflare Tutorial</h1>
+          <p class="text-sm text-gray-500 mt-1">
             {flashcards.length} topics across {categories.length} categories
           </p>
-          <a
-            href="https://github.com/acoyfellow/cf-tutorial"
-            target="_blank"
-            rel="noopener"
-            class="inline-flex items-center gap-2 mt-4 text-sm text-gray-500 hover:text-white transition"
-          >
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"
-              ><path
-                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
-              /></svg
-            >
-            Open Source
-          </a>
         </div>
 
-        <div class="space-y-4">
-          <!-- Easy Mode -->
-          <a
-            href="/quiz/easy"
-            class="w-full bg-green-600 hover:bg-green-700 text-white py-4 px-6 rounded-lg font-medium text-lg transition flex items-center justify-center gap-3"
-          >
-            <span>Easy Mode (Multiple Choice)</span>
-            <span class="text-green-200 text-sm">20 questions</span>
-          </a>
-
-          <div class="relative">
-            <div class="absolute inset-0 flex items-center">
-              <div class="w-full border-t border-gray-700"></div>
-            </div>
-            <div class="relative flex justify-center text-sm">
-              <span class="px-2 bg-gray-900 text-gray-500"
-                >or challenge yourself</span
-              >
-            </div>
-          </div>
-
-          <a
-            href="/quiz/full"
-            class="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 px-6 rounded-lg font-medium text-lg transition flex items-center justify-center gap-3"
-          >
-            <span>Full Quiz ({flashcards.length} cards)</span>
-            <span class="text-orange-200 text-sm"
-              >~{Math.ceil(flashcards.length * 1.5)} min</span
-            >
-          </a>
-
-          <a
-            href="/quiz/quick"
-            class="w-full bg-gray-800 hover:bg-gray-700 text-white py-4 px-6 rounded-lg font-medium text-lg transition flex items-center justify-center gap-3"
-          >
-            <span>Quick Quiz (20 random)</span>
-            <span class="text-gray-400 text-sm">~25 min</span>
-          </a>
-
-          <div class="pt-4">
-            <p class="text-sm text-gray-500 mb-3">Or select a category:</p>
-            <div class="flex flex-wrap gap-2">
-              {#each categories as cat}
-                <a
-                  href="/quiz/category/{encodeURIComponent(cat)}"
-                  class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm transition"
+        <!-- Interactive Tutorial Card -->
+        <a
+          href="/learn/workers-101"
+          class="block bg-blue-600 hover:bg-blue-700 rounded-xl p-5 mb-4 transition group"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <svg
+                  class="w-5 h-5 text-blue-200"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  {cat}
-                  <span class="text-gray-500"
-                    >({flashcards.filter((c) => c.category === cat)
-                      .length})</span
-                  >
-                </a>
-              {/each}
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span class="text-lg font-semibold text-white">Workers 101</span
+                >
+              </div>
+              <p class="text-blue-200 text-sm">
+                Start learning with hands-on examples
+              </p>
             </div>
+            <svg
+              class="w-5 h-5 text-blue-200 group-hover:translate-x-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </div>
+        </a>
+
+        <!-- Divider -->
+        <div class="relative my-6">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-700"></div>
+          </div>
+          <div class="relative flex justify-center text-xs">
+            <span class="px-3 bg-gray-900 text-gray-500 uppercase tracking-wide"
+              >or take a quiz</span
+            >
           </div>
         </div>
 
+        <!-- Easy Mode Card -->
+        <a
+          href="/quiz/easy"
+          class="block bg-green-600 hover:bg-green-700 rounded-xl p-5 mb-4 transition group"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <svg
+                  class="w-5 h-5 text-green-200"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span class="text-lg font-semibold text-white">Easy Mode</span>
+              </div>
+              <p class="text-green-200 text-sm">
+                Multiple choice - 20 questions
+              </p>
+            </div>
+            <svg
+              class="w-5 h-5 text-green-200 group-hover:translate-x-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </div>
+        </a>
+
+        <!-- Divider -->
+        <div class="relative my-6">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-700"></div>
+          </div>
+          <div class="relative flex justify-center text-xs">
+            <span class="px-3 bg-gray-900 text-gray-500 uppercase tracking-wide"
+              >or challenge yourself</span
+            >
+          </div>
+        </div>
+
+        <!-- Quick Quiz Card -->
+        <a
+          href="/quiz/quick"
+          class="block bg-gray-800 hover:bg-gray-750 border border-gray-700 rounded-xl p-5 mb-4 transition group"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-300 text-sm">20 random questions - ~25 min</p>
+            </div>
+            <svg
+              class="w-5 h-5 text-gray-500 group-hover:translate-x-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </div>
+        </a>
+
+        <!-- Full Certification Card -->
+        <a
+          href="/quiz/full"
+          class="block bg-orange-500 hover:bg-orange-600 rounded-xl p-5 mb-8 transition group"
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <svg
+                  class="w-5 h-5 text-orange-200"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                  />
+                </svg>
+                <span class="text-lg font-semibold text-white"
+                  >Full Certification</span
+                >
+              </div>
+              <p class="text-orange-200 text-sm">
+                All {flashcards.length} cards - ~{Math.ceil(
+                  flashcards.length * 1.5
+                )} min
+              </p>
+            </div>
+            <svg
+              class="w-5 h-5 text-orange-200 group-hover:translate-x-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </div>
+        </a>
+
+        <!-- Categories Section -->
+        <div class="mb-8">
+          <p class="text-xs text-gray-500 uppercase tracking-wide mb-4">
+            Or select a category
+          </p>
+          <div class="flex flex-wrap gap-2">
+            {#each categories as cat}
+              {@const count = flashcards.filter(
+                (c) => c.category === cat
+              ).length}
+              <a
+                href="/quiz/category/{encodeURIComponent(cat)}"
+                class="px-3 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg text-sm transition flex items-center gap-2"
+              >
+                <span class="text-gray-300">{cat}</span>
+                <span class="text-gray-500">({count})</span>
+              </a>
+            {/each}
+          </div>
+        </div>
+
+        <!-- Recent Sessions -->
         {#if quizStore.sessions.length > 0}
-          <div class="mt-8 p-4 bg-gray-800/50 rounded-lg">
+          <div
+            class="mb-8 p-4 bg-gray-800/50 rounded-xl border border-gray-700/50"
+          >
             <div class="flex items-center justify-between mb-3">
-              <h3 class="font-medium">Recent Sessions</h3>
+              <h3 class="text-sm font-medium text-gray-400">Recent Sessions</h3>
               <button
                 onclick={() => quizStore.goToHistory()}
-                class="text-sm text-orange-400 hover:text-orange-300"
+                class="text-xs text-orange-400 hover:text-orange-300"
                 >View All</button
               >
             </div>
@@ -270,14 +410,46 @@
           </div>
         {/if}
 
-        <div class="mt-8 p-4 bg-gray-800/50 rounded-lg">
-          <h3 class="font-medium mb-2">How it works:</h3>
-          <ul class="text-sm text-gray-400 space-y-1">
-            <li>1. Answer each question in your own words</li>
-            <li>2. AI evaluates your answer against the reference</li>
-            <li>3. Ask follow-up questions to learn more</li>
-            <li>4. Get a full analysis & study plan at the end</li>
+        <!-- How it works -->
+        <div class="mb-8">
+          <p class="text-xs text-gray-500 uppercase tracking-wide mb-4">
+            How it works
+          </p>
+          <ul class="text-sm text-gray-400 space-y-2 pl-1">
+            <li class="flex items-start gap-2">
+              <span class="text-gray-600">-</span>
+              Answer each question in your own words
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-gray-600">-</span>
+              AI evaluates your answer against the reference
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-gray-600">-</span>
+              Ask follow-up questions to learn more
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-gray-600">-</span>
+              Get a full analysis & study plan at the end
+            </li>
           </ul>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center pb-8">
+          <a
+            href="https://github.com/acoyfellow/cf-tutorial"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 text-xs text-gray-500 hover:text-white transition"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
+              />
+            </svg>
+            Open Source
+          </a>
         </div>
       </div>
     </div>
