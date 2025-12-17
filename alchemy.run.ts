@@ -8,13 +8,13 @@ import {
   Ai
 } from "alchemy/cloudflare";
 
-// TODO: Import your Durable Object class here
-// import type { MyDO } from "./worker/index.ts";
+import { CloudflareStateStore } from "alchemy/state";
 
 const projectName = "cf-tutorial";
 
 const project = await alchemy(projectName, {
-  password: process.env.ALCHEMY_PASSWORD!
+  password: process.env.ALCHEMY_PASSWORD!,
+  stateStore: (scope) => new CloudflareStateStore(scope)
 });
 
 // TODO: Create your Durable Object namespace
