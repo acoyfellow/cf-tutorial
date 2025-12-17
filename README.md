@@ -8,12 +8,13 @@ An interactive learning platform for mastering Cloudflare's developer platform. 
 
 ## Features
 
-- **95+ Interactive Questions** covering Workers, KV, Durable Objects, D1, R2, Queues, Workflows, AI Gateway, and more
+- **106 Interactive Questions** covering Workers, KV, Durable Objects, D1, R2, Queues, Workflows, AI Gateway, and more
 - **AI-Powered Evaluation** using Cloudflare Workers AI (Llama 3.1) to judge your answers
 - **Follow-up Questions** - ask the AI to clarify any concept
 - **Progress Tracking** with localStorage persistence
 - **Performance Analytics** by category with study recommendations
 - **Multiple Quiz Modes** - full quiz, quick 20-question, or by category
+- **Workers 101 Code Playground** backed by a Cloudflare `worker_loader` binding that runs your code safely via `/api/run`
 
 ## Tech Stack
 
@@ -47,7 +48,7 @@ The app will be available at `http://localhost:5173`
 ```
 src/
 ├── lib/
-│   ├── flashcards.ts         # 95+ quiz questions and answers
+│   ├── flashcards.ts         # 106 quiz questions and answers
 │   ├── quiz-store.svelte.ts  # Svelte 5 reactive quiz state
 │   ├── auth.ts               # Better Auth config (optional)
 │   └── schema.ts             # D1 database schema
@@ -57,7 +58,7 @@ src/
 └── hooks.server.ts           # Server hooks
 
 worker/
-└── index.ts                  # Durable Objects (extensible)
+└── index.ts                  # Durable Object + worker_loader-powered code playground API (/api/run)
 
 alchemy.run.ts                # Cloudflare deployment config
 ```
@@ -73,7 +74,7 @@ alchemy.run.ts                # Cloudflare deployment config
 | D1 | 5 | SQLite at the edge |
 | R2 | 4 | S3-compatible object storage |
 | Queues | 4 | At-least-once delivery |
-| Service Bindings | 5 | Worker-to-Worker RPC |
+| Service Bindings | 4 | Worker-to-Worker RPC |
 | Workflows | 8 | Durable execution |
 | Agents SDK | 5 | AI agent framework |
 | MCP | 4 | Model Context Protocol |
@@ -93,7 +94,7 @@ alchemy.run.ts                # Cloudflare deployment config
 
 ## How It Works
 
-1. **Choose a quiz mode** - Full (95 questions), Quick (20 random), or by category
+1. **Choose a quiz mode** - Full (106 questions), Quick (20 random), or by category
 2. **Answer questions** in your own words
 3. **AI evaluates** your answer against the reference using Workers AI
 4. **Ask follow-ups** to clarify concepts you're unsure about

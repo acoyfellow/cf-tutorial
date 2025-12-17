@@ -6,7 +6,10 @@
   import { page } from "$app/state";
 
   let { data } = $props();
-  let { lesson, nextLesson, previousLesson } = data;
+
+  const lesson = $derived(data.lesson);
+  const nextLesson = $derived(data.nextLesson);
+  const previousLesson = $derived(data.previousLesson);
 
   // Separate blocks into instructions and playground
   const instructions = $derived(lesson.blocks.filter((b) => b.type === "text"));

@@ -3,3 +3,5 @@ export async function load({ params }) {
     course: params.course,
   };
 }
+
+
