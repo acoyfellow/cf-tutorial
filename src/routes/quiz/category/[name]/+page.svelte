@@ -35,25 +35,6 @@
   description="Test your knowledge of {categoryName} with interactive quizzes"
 />
 
-<svelte:head>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin="anonymous"
-  />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@300..800&family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap"
-    rel="stylesheet"
-  />
-</svelte:head>
-
 <div class="min-h-screen bg-gray-900 text-white">
   <Quiz />
 </div>
-
-<style>
-  :global(body) {
-    font-family: "Google Sans Flex", sans-serif;
-  }
-</style>

@@ -90,19 +90,6 @@
   keywords="cloudflare, workers, d1, durable objects, pages, kv, r2, tutorial, quiz, learning"
 />
 
-<svelte:head>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin="anonymous"
-  />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@300..800&family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap"
-    rel="stylesheet"
-  />
-</svelte:head>
-
 {#if quizStore.pendingResume}
   <div
     class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
@@ -894,13 +881,6 @@
 </div>
 
 <style>
-  :global(body) {
-    font-family: "Google Sans Flex", sans-serif;
-  }
-  code,
-  .mono {
-    font-family: "Google Sans Code", monospace;
-  }
   .scrollbar-thin::-webkit-scrollbar {
     width: 6px;
   }
